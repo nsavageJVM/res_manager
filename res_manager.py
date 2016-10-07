@@ -39,9 +39,11 @@ def get_res_client():
     print_item(resource_client.resource_groups.create_or_update(GROUP_NAME, resource_group_params))
     return resource_client
 
-# fix this need create res group first ect ...
+#endregion
+
+#region get_res_vault
 def get_res_vault():
-    print('\nCreate and then delete a vault')
+    print('\nCreate vault')
     kv_client = KeyVaultManagementClient(get_creds(), get_sub_id())
     res_client = get_res_client()
     vault = kv_client.vaults.create_or_update(
@@ -71,6 +73,12 @@ def get_res_vault():
     print('\nList KeyVault')
     for vault in kv_client.vaults.list():
         print_item(vault)
+    return res_client
+
+#endregion
+
+#region get_res_vault
+def del_res_vault(res_client):
 
     print('\nDelete Resource Group')
     delete_async_operation = res_client.resource_groups.delete(GROUP_NAME)
@@ -80,18 +88,17 @@ def get_res_vault():
 #endregion
 
 def main(argv):
-
+    global res_client
     while True:
-        command = raw_input('command? QQ to quit ').strip()
-        if command == 'vault':
-            # fix this need create res group first ect ...
-            get_res_vault()
-        elif command == 'other_thing':
-            print('Doing something else')
+        command = raw_input('command? QQ to quit\n ').strip()
+        if command == 'c-vault':
+            res_client =  get_res_vault()
+        elif command == 'd-vault':
+            del_res_vault(res_client)
         elif command == 'QQ':
             break
         else:
-            print('Invalid Command.')
+            print('Invalid Command\n')
 
 
 
